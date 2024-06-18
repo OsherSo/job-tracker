@@ -6,7 +6,11 @@ import User from "../models/User.js";
 
 import { JOB_STATUS, JOB_TYPE } from "../utils/constants.js";
 
-import { BadRequestError, NotFoundError } from "../errors/customErrors.js";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../errors/customErrors.js";
 
 const withValidationErrors = (validateValues) => {
   return [
@@ -15,8 +19,11 @@ const withValidationErrors = (validateValues) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((error) => error.msg);
-        if (errorMessages[0].startsWith("Job not")) {
+        if (errorMessages[0].startsWith("Job not found")) {
           throw new NotFoundError(errorMessages);
+        }
+        if (errorMessages[0].startsWith("Unauthorized")) {
+          throw new UnauthorizedError(errorMessages);
         }
         throw new BadRequestError(errorMessages);
       }
@@ -25,33 +32,10 @@ const withValidationErrors = (validateValues) => {
   ];
 };
 
-export const validateJob = withValidationErrors([
-  body("company").isString().notEmpty().withMessage("Company is required"),
-  body("position").isString().notEmpty().withMessage("Position is required"),
-  body("location").isString().notEmpty().withMessage("Location is required"),
-  body("status")
-    .isString()
-    .optional()
-    .isIn(Object.values(JOB_STATUS))
-    .withMessage("Invalid status"),
-  body("type")
-    .isString()
-    .optional()
-    .isIn(Object.values(JOB_TYPE))
-    .withMessage("Invalid type"),
-]);
+const isNonEmptyString = (field) =>
+  body(field).isString().notEmpty().withMessage(`${field} is required`);
 
-export const validateJobId = withValidationErrors([
-  param("id").custom(async (value) => {
-    const isValidId = mongoose.Types.ObjectId.isValid(value);
-    if (!isValidId) throw new BadRequestError("Invalid job id");
-    const job = await Job.findById(value);
-    if (!job) throw new NotFoundError("Job not found");
-  }),
-]);
-
-export const validateRegisterInput = withValidationErrors([
-  body("name").notEmpty().withMessage("name is required"),
+const validateEmail = () =>
   body("email")
     .notEmpty()
     .withMessage("email is required")
@@ -62,14 +46,52 @@ export const validateRegisterInput = withValidationErrors([
       if (user) {
         throw new BadRequestError("email already exists");
       }
-    }),
+    });
+
+const validatePassword = () =>
   body("password")
     .notEmpty()
     .withMessage("password is required")
     .isLength({ min: 8 })
-    .withMessage("password must be at least 8 characters long"),
-  body("location").notEmpty().withMessage("location is required"),
-  body("lastName").notEmpty().withMessage("last name is required"),
+    .withMessage("password must be at least 8 characters long");
+
+const validateOptionalField = (field, values) =>
+  body(field).optional().isIn(values).withMessage(`Invalid ${field}`);
+
+export const validateJob = withValidationErrors([
+  isNonEmptyString("company"),
+  isNonEmptyString("position"),
+  isNonEmptyString("location"),
+  validateOptionalField("status", Object.values(JOB_STATUS)),
+  validateOptionalField("type", Object.values(JOB_TYPE)),
+]);
+
+export const validateJobId = withValidationErrors([
+  param("id").custom(async (value, { req }) => {
+    const isValidId = mongoose.Types.ObjectId.isValid(value);
+    if (!isValidId) {
+      throw new BadRequestError("Invalid job id");
+    }
+
+    const job = await Job.findById(value);
+    if (!job) {
+      throw new NotFoundError("Job not found");
+    }
+
+    const isAdmin = req.user.role === "admin";
+    const isOwner = req.user.userId === job.createdBy.toString();
+    if (!isAdmin && !isOwner) {
+      throw new UnauthorizedError("Unauthorized");
+    }
+  }),
+]);
+
+export const validateRegisterInput = withValidationErrors([
+  isNonEmptyString("name"),
+  validateEmail(),
+  validatePassword(),
+  isNonEmptyString("location"),
+  isNonEmptyString("lastName"),
 ]);
 
 export const validateLoginInput = withValidationErrors([
