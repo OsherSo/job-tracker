@@ -1,14 +1,27 @@
+import { toast } from "react-toastify";
 import styled from "styled-components";
-import { Outlet } from "react-router-dom";
 import { createContext, useState, useContext } from "react";
+import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom";
 
 import { checkDefaultTheme } from "../App";
+import customFetch from "../utils/customFetch";
 import { Navbar, BigSidebar, SmallSidebar } from "../components";
+
+export const loader = async () => {
+  try {
+    const { data } = await customFetch("/users/current-user");
+    return data;
+  } catch (error) {
+    return redirect("/");
+  }
+};
 
 const DashboardContext = createContext();
 
 const DashboardLayout = () => {
-  const user = { name: "john" };
+  const { user } = useLoaderData();
+
+  const navigate = useNavigate();
 
   const [showSidebar, setShowSidebar] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme());
@@ -25,7 +38,9 @@ const DashboardLayout = () => {
   };
 
   const logout = async () => {
-    console.log("logout");
+    navigate("/");
+    await customFetch.get("/auth/logout");
+    toast.success("Logged out successfully");
   };
 
   return (
@@ -46,7 +61,7 @@ const DashboardLayout = () => {
           <div>
             <Navbar />
             <div className="dashboard-page">
-              <Outlet />
+              <Outlet context={{ user }} />
             </div>
           </div>
         </main>
