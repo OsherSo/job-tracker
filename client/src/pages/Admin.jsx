@@ -1,5 +1,43 @@
-function Admin() {
-  return <h1>Admin</h1>;
-}
+import { toast } from "react-toastify";
+import { useLoaderData, redirect } from "react-router-dom";
+import { FaSuitcaseRolling, FaCalendarCheck } from "react-icons/fa";
+
+import { StatItem } from "../components";
+
+import customFetch from "../utils/customFetch";
+
+import Wrapper from "../assets/wrappers/StatsContainer";
+
+export const loader = async () => {
+  try {
+    const response = await customFetch.get("/users/admin/app-stats");
+    return response.data;
+  } catch (error) {
+    toast.error("You are not authorized to view this page");
+    return redirect("/dashboard");
+  }
+};
+
+const Admin = () => {
+  const { totalJobs, totalUsers } = useLoaderData();
+  return (
+    <Wrapper>
+      <StatItem
+        title="current users"
+        count={totalUsers}
+        color="#e9b949"
+        bcg="#fcefc7"
+        icon={<FaSuitcaseRolling />}
+      />
+      <StatItem
+        title="total jobs"
+        count={totalJobs}
+        color="#647acb"
+        bcg="#e0e8f9"
+        icon={<FaCalendarCheck />}
+      />
+    </Wrapper>
+  );
+};
 
 export default Admin;
