@@ -21,7 +21,21 @@ export const action = async ({ request }) => {
 };
 
 const Login = () => {
-  const loginDemoUser = async () => {};
+  const navigate = useNavigate();
+
+  const loginDemoUser = async () => {
+    const data = {
+      email: "test@test.com",
+      password: "secret123",
+    };
+    try {
+      await customFetch.post("/auth/login", data);
+      toast.success("Login successful");
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+  };
 
   return (
     <Wrapper>
