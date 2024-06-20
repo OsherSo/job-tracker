@@ -13,6 +13,7 @@ import {
   Profile,
   Admin,
   EditJob,
+  ToDoList,
 } from "./pages";
 
 import { action as registerAction } from "./pages/Register";
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
             path: "profile",
             element: <Profile />,
             action: profileAction,
+          },
+          {
+            path: "to-do-list",
+            element: <ToDoList />,
           },
           {
             path: "admin",
