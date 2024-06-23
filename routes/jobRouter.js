@@ -10,7 +10,7 @@ import {
 } from "../controllers/jobController.js";
 
 import { checkForTestUser } from "../middleware/auth.js";
-import { validateJob, validateJobId } from "../middleware/validation.js";
+import { validateJob, validateJobId } from "../validation/jobValidation.js";
 
 const router = Router();
 

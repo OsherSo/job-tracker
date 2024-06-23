@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import upload from "../middleware/multer.js";
 import { authorizePermissions, checkForTestUser } from "../middleware/auth.js";
-import { validateUpdateUserInput } from "../middleware/validation.js";
+import { validateUpdateUserInput } from "../validation/userValidation.js";
 
 import {
   getCurrentUser,
