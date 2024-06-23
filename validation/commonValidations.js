@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { body } from "express-validator";
 
 import User from "../models/User.js";

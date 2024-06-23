@@ -1,12 +1,12 @@
 import { body } from "express-validator";
 
-import { withValidationErrors } from "./withValidationErrors";
+import withValidationErrors from "./withValidationErrors.js";
 import {
   isNonEmptyString,
   validateEmail,
   validatePassword,
   validateUniqueEmail,
-} from "./commonValidations";
+} from "./commonValidations.js";
 
 const validateRegisterInput = withValidationErrors([
   isNonEmptyString("name"),

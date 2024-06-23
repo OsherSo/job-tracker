@@ -1,8 +1,12 @@
 import { param } from "express-validator";
 
 import Task from "../models/Task.js";
-import { withValidationErrors } from "./withValidationErrors";
-import { isNonEmptyString, validateOptionalField } from "./commonValidations";
+import { TASK_PRIORITY } from "../utils/constants.js";
+import withValidationErrors from "./withValidationErrors.js";
+import {
+  isNonEmptyString,
+  validateOptionalField,
+} from "./commonValidations.js";
 
 const validateTask = withValidationErrors([
   isNonEmptyString("title"),

@@ -1,9 +1,13 @@
 import { param } from "express-validator";
 
 import Job from "../models/Job.js";
-import { JOB_STATUS, JOB_TYPE } from "../utils/constants";
-import { withValidationErrors } from "./withValidationErrors";
-import { isNonEmptyString, validateOptionalField } from "./commonValidations";
+import { JOB_STATUS, JOB_TYPE } from "../utils/constants.js";
+import withValidationErrors from "./withValidationErrors.js";
+import {
+  validateId,
+  isNonEmptyString,
+  validateOptionalField,
+} from "./commonValidations.js";
 
 const validateJob = withValidationErrors([
   isNonEmptyString("company"),
