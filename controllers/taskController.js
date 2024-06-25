@@ -4,8 +4,9 @@ import Task from "../models/Task.js";
 
 const getAllTasks = async (req, res) => {
   const tasks = await Task.find({ createdBy: req.user.userId });
+  const totalTasks = tasks.length;
 
-  res.status(StatusCodes.OK).json({ tasks });
+  res.status(StatusCodes.OK).json({ tasks, totalTasks });
 };
 
 const createTask = async (req, res) => {

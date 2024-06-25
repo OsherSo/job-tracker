@@ -1,3 +1,4 @@
+export { default as AddTask } from "./AddTask";
 export { default as BigSidebar } from "./BigSidebar";
 export { default as ChartsContainer } from "./ChartsContainer";
 export { default as FormRow } from "./FormRow";
@@ -12,4 +13,5 @@ export { default as SmallSidebar } from "./SmallSidebar";
 export { default as StatItem } from "./StatItem";
 export { default as StatsContainer } from "./StatsContainer";
 export { default as SubmitBtn } from "./SubmitBtn";
+export { default as TaskContainer } from "./TaskContainer";
 export { default as ThemeToggle } from "./ThemeToggle";

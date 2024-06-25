@@ -1,19 +1,10 @@
 import { param } from "express-validator";
 
 import Task from "../models/Task.js";
-import { TASK_PRIORITY } from "../utils/constants.js";
 import withValidationErrors from "./withValidationErrors.js";
-import {
-  validateId,
-  isNonEmptyString,
-  validateOptionalField,
-} from "./commonValidations.js";
+import { validateId, isNonEmptyString } from "./commonValidations.js";
 
-const validateTask = withValidationErrors([
-  isNonEmptyString("title"),
-  isNonEmptyString("description"),
-  validateOptionalField("priority", Object.values(TASK_PRIORITY)),
-]);
+const validateTask = withValidationErrors([isNonEmptyString("description")]);
 
 const validateTaskId = withValidationErrors([
   param("id").custom(async (value, { req }) => {

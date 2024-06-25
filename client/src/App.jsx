@@ -27,6 +27,9 @@ import { action as deleteJobAction } from "./pages/DeleteJob";
 import { loader as adminLoader } from "./pages/Admin";
 import { action as profileAction } from "./pages/Profile";
 import { loader as statsLoader } from "./pages/Stats";
+import { loader as toDoListLoader } from "./pages/ToDoList";
+import { action as toDoListAction } from "./pages/ToDoList";
+import { action as deleteTaskAction } from "./pages/DeleteTask";
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
@@ -84,6 +87,8 @@ const router = createBrowserRouter([
           {
             path: "to-do-list",
             element: <ToDoList />,
+            loader: toDoListLoader,
+            action: toDoListAction,
           },
           {
             path: "admin",
@@ -99,6 +104,10 @@ const router = createBrowserRouter([
           {
             path: "delete-job/:id",
             action: deleteJobAction,
+          },
+          {
+            path: "delete-task/:id",
+            action: deleteTaskAction,
           },
         ],
       },
