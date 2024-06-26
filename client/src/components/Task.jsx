@@ -26,11 +26,6 @@ const Task = ({ _id, description, completed }) => {
           <Link to={`../edit-task/${_id}`} className="btn edit-btn">
             Edit
           </Link>
-          <Form method="post" action={`../complete-task/${_id}`}>
-            <button type="submit" className="btn delete-btn">
-              {completed ? "Uncomplete" : "Complete"}
-            </button>
-          </Form>
           <Form method="post" action={`../delete-task/${_id}`}>
             <button type="submit" className="btn delete-btn">
               Delete

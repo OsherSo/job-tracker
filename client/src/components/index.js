@@ -2,6 +2,7 @@ export { default as AddTask } from "./AddTask";
 export { default as BigSidebar } from "./BigSidebar";
 export { default as ChartsContainer } from "./ChartsContainer";
 export { default as FormRow } from "./FormRow";
+export { default as FormRowCheckbox } from "./FormRowCheckbox";
 export { default as FormRowSelect } from "./FormRowSelect";
 export { default as JobsContainer } from "./JobsContainer";
 export { default as Logo } from "./Logo";

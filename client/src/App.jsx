@@ -14,6 +14,7 @@ import {
   Admin,
   EditJob,
   ToDoList,
+  EditTask,
 } from "./pages";
 
 import { action as registerAction } from "./pages/Register";
@@ -30,6 +31,8 @@ import { loader as statsLoader } from "./pages/Stats";
 import { loader as toDoListLoader } from "./pages/ToDoList";
 import { action as toDoListAction } from "./pages/ToDoList";
 import { action as deleteTaskAction } from "./pages/DeleteTask";
+import { loader as editTaskLoader } from "./pages/EditTask";
+import { action as editTaskAction } from "./pages/EditTask";
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
@@ -100,6 +103,12 @@ const router = createBrowserRouter([
             element: <EditJob />,
             loader: editJobLoader,
             action: editJobAction,
+          },
+          {
+            path: "edit-task/:id",
+            element: <EditTask />,
+            loader: editTaskLoader,
+            action: editTaskAction,
           },
           {
             path: "delete-job/:id",
